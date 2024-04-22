@@ -44,6 +44,8 @@ async function handleSubmit(event) {
     gallery.innerHTML = '';
   } else {
     try {
+      showLoadingIndicator();
+
       images = await searchImages(query, currentPage);
 
       if (images.hits.length === 0) {
@@ -76,6 +78,7 @@ async function handleSubmit(event) {
     }
   }
 
+  hideLoadingIndicator();
   checkLoadMoreBtnStatus();
   event.target.reset();
 }
@@ -84,6 +87,7 @@ async function handleSubmit(event) {
 
 async function loadMore() {
   currentPage += 1;
+  showLoadingIndicator();
 
   try {
     const moreImages = await searchImages(query, currentPage);
@@ -98,6 +102,25 @@ async function loadMore() {
   lightbox.refresh();
   scroll();
   checkLoadMoreBtnStatus();
+  hideLoadingIndicator();
+}
+
+// ==============================================================
+
+function showLoadingIndicator() {
+  const loader = document.createElement('span');
+  loader.className = 'loader';
+
+  const container = document.querySelector('.container');
+
+  container.appendChild(loader);
+}
+
+function hideLoadingIndicator() {
+  const loader = document.querySelector('.loader');
+  if (loader) {
+    loader.remove();
+  }
 }
 
 // ==============================================================

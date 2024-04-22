@@ -18,33 +18,18 @@ export async function searchImages(query, currentPage) {
 
   const url = `https://pixabay.com/api/?${params}`;
 
-  showLoadingIndicator();
-
   try {
     const response = await axios.get(url);
     const data = response.data;
 
-    hideLoadingIndicator();
-
     return data;
   } catch (error) {
     console.log(error);
-    hideLoadingIndicator();
+
+    iziToast.error({
+      message: 'An error occurred. Please try again later.',
+    });
   }
 }
 
 // ==============================================================
-
-function showLoadingIndicator() {
-  const loader = document.createElement('span');
-  loader.className = 'loader';
-
-  document.body.appendChild(loader);
-}
-
-function hideLoadingIndicator() {
-  const loader = document.querySelector('.loader');
-  if (loader) {
-    loader.remove();
-  }
-}
