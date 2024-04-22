@@ -21,6 +21,8 @@ let currentPage = 1;
 let maxPage = 0;
 const pageSize = 15;
 
+let images;
+
 // ==============================================================
 
 form.addEventListener('submit', handleSubmit);
@@ -42,7 +44,7 @@ async function handleSubmit(event) {
     gallery.innerHTML = '';
   } else {
     try {
-      const images = await searchImages(query, currentPage);
+      images = await searchImages(query, currentPage);
 
       if (images.hits.length === 0) {
         iziToast.error({
@@ -68,7 +70,9 @@ async function handleSubmit(event) {
         gallery.innerHTML = '';
       }
     } catch (error) {
-      console.error(error);
+      iziToast.error({
+        message: 'An error occurred. Please try again later.',
+      });
     }
   }
 
@@ -82,11 +86,13 @@ async function loadMore() {
   currentPage += 1;
 
   try {
-    const images = await searchImages(query, currentPage);
-    const markup = createMarkup(images.hits);
+    const moreImages = await searchImages(query, currentPage);
+    const markup = createMarkup(moreImages.hits);
     gallery.insertAdjacentHTML('beforeend', markup);
   } catch (error) {
-    console.log(error);
+    iziToast.error({
+      message: 'An error occurred. Please try again later.',
+    });
   }
 
   lightbox.refresh();
@@ -104,8 +110,6 @@ function hideLoadMoreBtn() {
 }
 
 async function checkLoadMoreBtnStatus() {
-  const images = await searchImages(query, currentPage);
-
   if (currentPage >= maxPage || !query || images.hits.length === 0) {
     hideLoadMoreBtn();
   } else {

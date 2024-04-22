@@ -69,12 +69,13 @@
 .load-more-btn {
   display: block;
   min-width: 150px;
-  margin: 0 auto;
-  margin-top: 20px;
+  margin: 20px auto 0;
 }
 
 .form-btn:hover,
-.form-btn:focus {
+.form-btn:focus,
+.load-more-btn:hover,
+.load-more-btn:focus {
   background-color: #6c8cff;
 }
 
